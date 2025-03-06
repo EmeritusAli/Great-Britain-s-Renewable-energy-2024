@@ -1,0 +1,24 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+	width: 100%;
+}
+
+@font-face {
+  font-family: 'Chakra Petch';
+  src: url('../fonts/ChakraPetch-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Aldrich';
+  src: url('../fonts/Aldrich-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Electrolize';
+  src: url('../fonts/Electrolize-Regular.ttf') format('truetype');
+}
