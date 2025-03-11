@@ -6,11 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && gh-pages -d dist"
   },
+  "homepage": "https://EmeritusAli.github.io/Great-Britain-s-Renewable-energy-2024",
+
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.1",
     "d3": "^7.9.0",
+    "gh-pages": "^6.3.0",
     "svelte": "^5.19.2",
     "vite": "^6.0.0"
   }

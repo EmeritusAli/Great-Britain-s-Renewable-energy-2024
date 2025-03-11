@@ -6,6 +6,16 @@
      import YAxis from './yAxis.svelte';
      import Tooltip from './Tooltip.svelte';
      import Waffle from './Waffle.svelte';
+     import { onMount } from 'svelte';
+
+    let windowWidth;
+
+    onMount(() => {
+        windowWidth = window.innerWidth;
+        const handleResize = () => windowWidth = window.innerWidth;
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    });
 
 
 
@@ -33,13 +43,10 @@
         values: $data.filter(d => d.source === source).map(d => ({ date: d.date, value: d.value }))
     }));
 
-    // Renewable energy percentage
     $: {
     if ($data && $data.length > 0) {
-        // Group data by energy source
         const sourceGroups = d3.group($data, d => d.source);
         
-        // Get total renewable energy (sum of all renewable values)
         const renewablesData = sourceGroups.get('Renewables (GW)') || [];
         const fossilData = sourceGroups.get('Fossil Fuels (GW)') || [];
         const otherData = sourceGroups.get('Other Sources (GW)') || [];
@@ -50,10 +57,8 @@
         transfersEnergy = d3.sum(transfersData, d => d.value);
 
         
-        // Get total energy (sum of all values)
         totalEnergy = d3.sum($data, d => d.value);
         
-        // Calculate percentage
         renewablePercentage = totalEnergy > 0 ? (renewableEnergy / totalEnergy) * 100 : 0;
         
         console.log("Renewable energy total:", renewableEnergy);
@@ -72,7 +77,6 @@
     const height = 320;
     const margin = { top: 20, right: 30, bottom: 30, left: 60 };
 
-    // Reactive scales: update when $data changes
     $: {
         if ($data.length > 0) {
             xScale = d3.scaleTime()
@@ -108,7 +112,6 @@
                 tooltipX = 10;
             }
 
-        // Use the actual x-position of the guide line instead of clientX
         hoveredData = {
             x: tooltipX,
             y: tooltipY,
@@ -151,18 +154,20 @@
                 </div>
             </div>
         </div>
-        <div class="footer-text">
-            <p> <a href="https://makeovermonday.co.uk/">#MakeOverMonday</a></p>
-            <p>Data source: <a href="https://grid.iamkate.com/">Elexon Insights Solution</a></p>
-            <p>Design: <a href="https://www.linkedin.com/in/adekolaaliu/">Aliu Adekola</a></p>
-        </div>
+        {#if windowWidth > 900}
+            <div class="footer-text">
+                <p> <a href="https://makeovermonday.co.uk/">#MakeOverMonday</a></p>
+                <p>Data source: <a href="https://grid.iamkate.com/">Elexon Insights Solution</a></p>
+                <p>Design: <a href="https://www.linkedin.com/in/adekolaaliu/">Aliu Adekola</a></p>
+            </div>
+        {/if}
     </div>
 
   
    <div class="right-section">
        <p class="chart-title">How did Great Britain’s energy mix change in 2024?</p>
         <div class="line-chart">
-            <svg width={width} height={height}>
+            <svg width='100%' height='auto' viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
                 <Chart {groupedData} 
                     {xScale} 
                     {yScale} 
@@ -179,8 +184,14 @@
                 <Tooltip {hoveredData} {colors} />
             {/if}
         </div>
-
-   </div>           
+   </div>
+    {#if windowWidth <= 900}
+        <div class="footer-text">
+            <p> <a href="https://makeovermonday.co.uk/">#MakeOverMonday</a></p>
+            <p>Data source: <a href="https://grid.iamkate.com/">Elexon Insights Solution</a></p>
+            <p>Design: <a href="https://www.linkedin.com/in/adekolaaliu/">Aliu Adekola</a></p>
+        </div>
+    {/if}           
 
 </main>
 
@@ -189,15 +200,19 @@
         display: flex;
         justify-content: space-between;
         align-items: stretch;
-        gap: 118px;
+        gap: 5%;
         background-color: #040C21; 
-        padding: 77px 60px;
-        max-height: 620px;
-        max-width: 1200px;
+        padding: 5vw 3vw;
+        max-width: 100%;
         width: 100%;
         margin: 0 auto;
         box-sizing: border-box;
+        flex-wrap: wrap;
     }
+
+    .left-section, .right-section {
+    min-width: 300px;
+     }
     .left-section {
         flex: 1;
         max-width: 40%;
@@ -211,7 +226,6 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        /* justify-content: space-between; */
     }
     .header-intro {
         font-size: 11px;
@@ -272,8 +286,9 @@
     }
    
     .chart-box {
-        height: 200px;
-        width: 200px;
+        height: auto;
+        width: 100%;
+        max-width: 200px;
         margin-top: auto;
         position: relative;
     }
@@ -296,31 +311,34 @@
 
     }
 
-    /* Right Section */
     .right-section {
         flex: 1.5;
-        height: 466px;
+        height: auto;
+        max-height: 466px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
     .chart-title {
-        padding-bottom: 20px;
+        padding-bottom: 0.8rem;
         font-size: 1rem;
         color: white;
         opacity: 0.6;
+        padding-left: 20px; 
     }
     .line-chart {
         position: relative;
         margin: 0 auto;
         background: #171F27;
         padding: 0px;
-        height: 100%;
-        width: 670px;
+        height: auto;
+        width: 100%;
+        max-width: 670px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         box-sizing: border-box;
+        aspect-ratio: 16/9;
 
 
     }
@@ -337,11 +355,65 @@
         
     }
     main {
-        /* text-align: center; */
         padding: 0;
         margin: 0 auto;
         font-family: 'Chakra Petch', sans-serif;
     }
+
+
+
+@media (max-width: 900px) {
+    .dashboard {
+        flex-direction: column;
+        align-items: center;
+    }
+    .left-section, .right-section {
+        width: 90%; 
+    }
+    
+
+    .footer-text {
+        order: 3;
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+    .line-chart {
+        order: 2;
+    }
+   
+  }
+
+  @media (max-width: 600px) {
+    .line-chart {
+        max-width: 90%;
+        aspect-ratio: 4/3; 
+    }
+    .chart-box {
+        max-width: 150px;
+    }
+    .chart-title {
+        padding-bottom: 0.8rem;
+    }
+  }
+
+  @media (max-width: 1240px) {
+    .right-section {
+        max-width: 100%;
+        align-items: flex-start;
+        text-align: left;
+    }
+    .chart-title {
+        text-align: left; 
+        padding-left: 10px; 
+    }
+
+    .line-chart {
+        height: 400px; 
+        max-width: 100%;
+        aspect-ratio: unset;
+        justify-content: flex-start; 
+    }
+   }
     
     
 </style>

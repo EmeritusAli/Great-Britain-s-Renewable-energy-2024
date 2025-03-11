@@ -27,7 +27,6 @@
             return;
         }
 
-        // Fix 1: Create bisector that works directly with dates
         const bisectDate = d3.bisector(d => d).left;
         
         if (!groupedData || !groupedData[0] || !groupedData[0].values || groupedData[0].values.length === 0) {
@@ -38,37 +37,29 @@
         const allDates = groupedData[0].values.map(d => d.date);
         const date = xScale.invert(mouseX);
         
-        // Fix 2: Debug date conversion
         console.log('Mouse position:', mouseX);
         console.log('Inverted date:', date);
         console.log('All dates:', allDates);
         
-        // Fix 3: Sort dates to ensure bisector works correctly
         const sortedDates = [...allDates].sort((a, b) => a - b);
         const index = bisectDate(sortedDates, date);
         console.log('Bisect index with sorted dates:', index);
         
-        // Don't return early for index === 0
         
-        // Handle edge cases properly
         let d0, d1;
         if (index === 0) {
-            // At the start of data, just use first point
             d0 = sortedDates[0]; 
             d1 = index < sortedDates.length ? sortedDates[index] : null;
         } else if (index >= sortedDates.length) {
-            // At the end of data, use last point
             d0 = sortedDates[sortedDates.length - 1];
             d1 = null;
         } else {
-            // Normal case - we're between two points
             d0 = sortedDates[index - 1];
             d1 = sortedDates[index];
         }
         
         console.log('Found dates:', d0, d1);
         
-        // Fix 4: Better date comparison using timestamps
         const closestDate = d1 && d0 
             ? (Math.abs(date - d0) < Math.abs(date - d1) ? d0 : d1) 
             : d0;
@@ -80,7 +71,6 @@
             console.log('hoveredX set to:', hoveredX);
             
             const valuesAtDate = groupedData.map(({ source, values }) => {
-                // Fix 5: Compare using timestamps to avoid timezone issues
                 const point = values.find(d => 
                     d.date.getTime() === closestDate.getTime()
                 );
@@ -93,15 +83,15 @@
 
     if (valuesAtDate.length > 0) {
         const svgBounds = event.target.closest('svg').getBoundingClientRect();
-        const tooltipWidth = 150;  // Adjust based on actual tooltip size
+        const tooltipWidth = 150;  
         let tooltipX = event.clientX - svgBounds.left + 15;
         const svgRightEdge = svgBounds.right - svgBounds.left;
 
 
         if (tooltipX + tooltipWidth > svgRightEdge) {
-    tooltipX = svgRightEdge - tooltipWidth - 10; // Ensure it stays inside chart
+    tooltipX = svgRightEdge - tooltipWidth - 10; 
         } else if (tooltipX < 0) {
-            tooltipX = 10; // Prevent it from going too far left
+            tooltipX = 10; 
         }
         console.log("Client X:", event.clientX);
         console.log("SVG Bounds Left:", svgBounds.left);
@@ -127,7 +117,6 @@
 </script>
 
 <g class="chart-content">
-     <!-- Overlay must cover the entire chart area -->
      <rect
             x={margin.left}
             y={margin.top}
@@ -139,7 +128,6 @@
             on:mouseout={handleMouseOut}
             on:mouseleave={handleMouseOut}
  />
-    <!-- Draw lines first -->
     {#each groupedData as { source, values }, i}
         {#if xScale && yScale && values.length > 0}
             <path
@@ -152,7 +140,6 @@
             />
         {/if}
     {/each}
-    <!-- Guide elements on top -->
     {#if hoveredX !== null}
         <line
             class="guide-line"

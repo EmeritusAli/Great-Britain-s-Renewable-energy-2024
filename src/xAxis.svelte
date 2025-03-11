@@ -5,8 +5,7 @@
     export let height;
     export let margin;
 
-     // Reactive ticks: only compute if xScale is defined
-     $: ticks = xScale ? xScale.ticks(d3.timeMonth.every(1)) : [];
+    $: ticks = xScale ? xScale.ticks(d3.timeMonth.every(1)) : [];
     $: format = d3.timeFormat('%b');
 </script>
 
@@ -30,13 +29,5 @@
             {format(tick)}
         </text>
     {/each}
-    {#if xScale}
-        <!-- <line
-            x1={margin.left}
-            x2={xScale.range()[1]}
-            y1="0"
-            y2="0"
-            stroke="black"
-        /> -->
-    {/if}
+    
 </g>

@@ -1,7 +1,7 @@
 import {readable} from 'svelte/store';
 import { csv, autoType, timeParse} from 'd3';
 
-const dataPath = 'src/lib/data/UKEnergySource_data.csv';
+ const dataPath = import.meta.env.BASE_URL + 'UKEnergySource_data.csv';
 export const data = readable([], (set) => {
     (async () => {
         const loadedData = await csv(dataPath, (d) => {

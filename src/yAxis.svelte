@@ -48,13 +48,5 @@
             {tick} GW
         </text>
     {/each}
-    {#if yScale}
-        <!-- <line
-            x1="0"
-            x2="0"
-            y1={yScale.range()[0]}
-            y2={yScale.range()[1]}
-            stroke="black"
-        /> -->
-    {/if}
+    
 </g>

@@ -4,36 +4,6 @@
      export let colors;
 </script>
 
-<!-- {#if hoveredData && hoveredData.source}  
-    <div
-        class="tooltip"
-        in:fly={{ y: 10, duration: 200, delay: 200 }}
-        out:fade
-        style="top: {hoveredData.y + 10}px; left: {hoveredData.x + 10}px;"
-    >
-       
-        <h1>
-            {hoveredData.date}
-          </h1>
-          <div class='info'>
-          <span class="value">
-            {#each hoveredData.values as {source, value}}
-                <div class="tooltip-item">
-                    <span class="source-color"
-                    style="background: {colors[source]}; opacity: {source === 'Renewables (GW)' ? 1 : 0.5}"
-                    ></span>
-                    <span class="source-name">{source.replace(' (GW)', '')}</span>
-                    <span class="value">{value} GW</span>
-                </div>  
-            {/each}
-            {hoveredData.value} GW of
-          </span>
-          <span class="source" style="background: {colors[hoveredData.source]}">
-            {hoveredData.source}
-          </span> 
-        </div>
-    </div>
-{/if} -->
 
 {#if hoveredData}
 <div
@@ -63,52 +33,7 @@
 {/if}
 
 <style>
-    /* .tooltip {
-    position: absolute;
-    padding: 8px 10px;
-    background: white;
-    box-shadow: rgba(0, 0, 0, 0.15) 2px 3px 8px;
-    border-radius: 3px;
-    pointer-events: none;
-    min-width: 130px;
-    transition: top 300ms ease, left 300ms ease;
-  }
-
-  h1 {
-        margin: 0 0 6px 0;
-        font-size: 0.9rem;
-        font-weight: 500;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 4px;
-    }
-
-  .info {
-    display: flex;
-    justify-content: column;
-    gap: 6px;
-  }
-
-  .value {
-    font-size: 0.8rem;
-  }
-  .tooltip-item {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .source-color {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .source-name {
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        font-weight: bold;
-    } */
+   
      
     .tooltip {
       position: absolute;

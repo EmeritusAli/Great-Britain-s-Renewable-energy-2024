@@ -21,13 +21,11 @@
 
     function handleMouseOver(event) {
         hoverd = true;
-        // Get mouse coordinates relative to the energy-chart container
         const rect = event.currentTarget.closest('.energy-chart').getBoundingClientRect();
         tooltipX = event.clientX - rect.left;
         tooltipY = event.clientY - rect.top;
     };
 
-  // Create a function to render the waffle chart
   function renderWaffle() {
         if (!svgElement) return;
         
@@ -47,7 +45,6 @@
             renewable: i >= totalCells - renewableCells
         }));
         
-        // Create svg selection
         const svg = d3.select(svgElement);
         
         // Clear previous content
@@ -76,7 +73,7 @@
         renderWaffle();
     });
     
-    // Add this to re-render when props change
+    // re-render when props change
     $: if (renewablePercentage !== undefined && svgElement) {
         renderWaffle();
     };

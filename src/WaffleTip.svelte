@@ -28,12 +28,12 @@
     ];
 
     onMount(() => {
-        // Set up D3 scale
+  
         const xScale = d3.scaleLinear()
             .domain([0, totalEnergy])
             .range([0, width - margin.left - margin.right]);
 
-        // Select the SVG
+ 
         const svg = d3.select(svgElement)
             .attr("width", width)
             .attr("height", height);
@@ -60,7 +60,7 @@
             .attr("font-size", "12px")
             .attr("fill", "black");
 
-        // Add Values
+        // Values
         svg.selectAll("text.value")
             .data(energyData)
             .enter()
